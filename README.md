@@ -1,7 +1,6 @@
 # pore_sizer
 Tool to handle pore size distributions.
-
-Returns PSD and CPD from MIP output. CPD is ordered like in Delage().
+It returns PSD and CPD from MIP output. CPD is ordered like in Delage().
 
 Input files:
     input_mip               --> is a two columns txt file from MIP analysis:
