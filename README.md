@@ -10,8 +10,7 @@ pores.
 
   * input_cpd --> is a two columns txt file from existing cpd
     * 1st column --> diameters [um]
-    * 2nd column --> void ratio or porosity [-]
-                                (assumes it is void ratio)
+    * 2nd column --> void ratio or porosity [-]. Assumes it is void ratio
 
 * Inputs are in class INPUTS:
   * Gs --> specific gravity
@@ -21,16 +20,16 @@ pores.
   * surf_tension --> surface tension [N/m]
   * intervals --> psd intervals
   * dmax --> distribution max limit [um]
-  * dmin -->        ** distributions min limit [um]
+  * dmin --> distributions min limit [um]
 
-Methods:
-    plot                    -->     plots psd and cpd
-    save_output             -->     saves psd and cpd on txt
-    psd_from_cpd            -->     computes psd
-    cpd_from_mip            -->     import cpd from MIP
-    cpd_from_file           -->     import cpd from txt file
+* Methods:
+  * plot --> plots psd and cpd
+  * save_output --> saves psd and cpd on txt
+  * psd_from_cpd --> computes psd
+  * cpd_from_mip --> import cpd from MIP
+  * cpd_from_file --> import cpd from txt file
 
-Classes:
-    Inputs                  -->     input parameters
-    PSD                     -->     psd
-    CPD                     -->     cpd
+* Classes:
+  * Inputs --> input parameters
+  * PSD --> psd
+  * CPD --> cpd
