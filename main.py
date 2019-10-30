@@ -21,6 +21,7 @@ def main():
     data = pore.DataElaboration(inputs)
     data.cpd_from_mip('input/input_mip.txt')
     data.cpd.sort_cpd()
+#    data.cpd.reverse_cpd()
     data.psd_from_cpd()
     data.plot()
     data.save_output()
