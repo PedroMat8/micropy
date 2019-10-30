@@ -1,12 +1,13 @@
 """
-Returns PSD and CPD from MIP output. CPD is ordered like in Delage().
+Returns PSD and CPD from MIP output. CPD is ordered from smaller to larger
+pores.
 
 Input files:
-    input_mip               --> is a two columns txt file from MIP analysis:
+    input_mip           --> is a two columns txt file from MIP analysis
         1st column          --> Intrusion pressure [PSI]
         2nd column          --> Intruded volume [cc]
 
-    input_cpd               --> is a two columns txt file from existing cpd:
+    input_cpd           --> is a two columns txt file from existing cpd
         1st column          --> diameters [um]
         2nd column          --> void ratio or porosity [-]
                                 (assumes it is void ratio)
