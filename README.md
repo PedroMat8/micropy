@@ -28,6 +28,8 @@ pores.
   * psd_from_cpd --> computes psd
   * cpd_from_mip --> import cpd from MIP
   * cpd_from_file --> import cpd from txt file
+  * cpd.sort_cpd --> order cpd from smaller to larger diameters
+  * cpd.reverse_cpd -->         reverse cpd order
 
 * Classes:
   * Inputs --> input parameters
