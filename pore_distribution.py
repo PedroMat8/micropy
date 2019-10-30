@@ -1,6 +1,5 @@
 """
-Returns PSD and CPD from MIP output. CPD is ordered from smaller to larger
-pores.
+Returns PSD and CPD from MIP output.
 
 Input files:
     input_mip           --> is a two columns txt file from MIP analysis
@@ -28,6 +27,8 @@ Methods:
     psd_from_cpd            -->     computes psd
     cpd_from_mip            -->     import cpd from MIP
     cpd_from_file           -->     import cpd from txt file
+    cpd.sort_cpd            -->     order cpd from smaller to larger diameters
+    cpd.reverse_cpd         -->     reverse cpd order
 
 Classes:
     Inputs                  -->     input parameters
@@ -36,6 +37,7 @@ Classes:
 
 Created on 29/10/2019
 @author: PedroMat
+@email: matteo.pedrotti@strath.ac.uk
 """
 
 import numpy as np
@@ -88,9 +90,10 @@ class DataElaboration:
         for i in range(np.size(self.cpd.d, 0)-1):
             foo = np.exp((np.log(self.cpd.d[i]) +
                           np.log(self.cpd.d[i+1])) / 2)
-            foo1 = (
-                    self.cpd.e[i+1]-self.cpd.e[i])/(
+            foo1 = (self.cpd.e[i+1]-self.cpd.e[i])/(
                             np.log(self.cpd.d[i+1]/self.cpd.d[i]))
+            if np.argmax(self.cpd.e) == 0:  # reverse cpd
+                foo1 = -1*foo1
 
             self.psd.d = np.append(self.psd.d, foo)
             self.psd.e = np.append(self.psd.e, foo1)
@@ -181,6 +184,10 @@ class DataElaboration:
 
             elif np.argmax(self.e) == 0:
                 self.e = np.sort(max(self.e)-self.e)
+
+        def reverse_cpd(self):
+            self.sort_cpd()
+            self.e = np.sort(max(self.e)-self.e)[::-1]
 
 ###############################################################################
 
