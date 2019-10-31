@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import pore_distribution as pore
+from pore_sizer import pore_distribution as pore
 
 
 def main():
@@ -16,7 +16,8 @@ def main():
     inputs = {
             'Gs': Gs, 'Ms': Ms, 'w': w, 'teta': teta,
             'surf_tension': surf_tension, 'intervals': intervals,
-            'dmax': dmax, 'dmin': dmin}
+            'dmax': dmax, 'dmin': dmin
+            }
 
     data = pore.DataElaboration(inputs)
     data.cpd_from_file('input/input_cpd.txt')

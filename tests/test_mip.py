@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import pore_distribution as pore
+from pore_sizer import pore_distribution as pore
 
 
 def main():
@@ -10,7 +10,7 @@ def main():
     teta = 147  # [degrees]
     surf_tension = 0.48  # [N/m]
     intervals = 40
-    dmax = 200  # [um]
+    dmax = 240  # [um]
     dmin = 0.004  # [um]
 
     inputs = {

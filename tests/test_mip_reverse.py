@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import pore_distribution as pore
+from pore_sizer import pore_distribution as pore
 
 
 def main():

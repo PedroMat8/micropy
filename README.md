@@ -12,7 +12,7 @@ pores.
     * 1st column --> diameters [um]
     * 2nd column --> void ratio or porosity [-]. Assumes it is void ratio
 
-* Inputs are in class INPUTS:
+* Input parameters are in class INPUTS:
   * Gs --> specific gravity
   * Ms --> MIP sample dry mass
   * w --> water content
