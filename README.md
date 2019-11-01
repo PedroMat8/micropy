@@ -1,8 +1,8 @@
-##  pore_sizer
+##  micropy
 Python package to investigate the pore space.
 
 ## installation
-    pip install -i https://test.pypi.org/simple/ pore-sizer
+    pip install -i https://test.pypi.org/simple/ micropy
 
 ##  pore_distribution
 Module that handles cumulative and frequency pore distributions from MIP and/or
