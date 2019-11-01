@@ -1,8 +1,12 @@
-## Package --> pore_sizer
-Tool to investigate pore space.
-## Module --> pore_distribution
-It handles cumulative and frequency pore distributions from MIP and/or existing
-data.
+##  pore_sizer
+Python package to investigate the pore space.
+
+## installation
+    pip install -i https://test.pypi.org/simple/ pore-sizer
+
+##  pore_distribution
+Module that handles cumulative and frequency pore distributions from MIP and/or
+existing data.
 
 * ### Input files:
   * **input_mip** --> is a two columns txt file from MIP analysis
@@ -43,8 +47,12 @@ data.
   * _PSD_ --> psd
   * _CPD_ --> cpd
 
-  Created on 29/10/2019
+
+  created : 29/10/2019
+  username: PedroMat8
   MIT License - Copyright (c) 2019 Matteo Pedrotti
 
-  @author: PedroMat8
+  Please cite:
+[![DOI](https://www.zenodo.org/badge/218507773.svg)](https://www.zenodo.org/badge/latestdoi/218507773)
+  @author: Matteo Pedrotti
   @email: matteo.pedrotti@strath.ac.uk
