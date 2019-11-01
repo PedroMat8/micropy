@@ -1,48 +1,50 @@
-# pore_sizer
-Tool to handle pore size distributions.
-It returns PSD and CPD from MIP output. CPD is ordered from smaller to larger
-pores.
+## Package --> pore_sizer
+Tool to investigate pore space.
+## Module --> pore_distribution
+It handles cumulative and frequency pore distributions from MIP and/or existing
+data.
 
-* Input files:
-  * input_mip --> is a two columns txt file from MIP analysis
-    * 1st column --> Intrusion pressure [PSI]
-    * 2nd column --> Intruded volume [cc]
+* ### Input files:
+  * **input_mip** --> is a two columns txt file from MIP analysis
+    * _1st column_ --> Intrusion pressure [PSI]
+    * _2nd column_ --> Intruded volume [cc]
 
-  * input_cpd --> is a two columns txt file from existing cpd
-    * 1st column --> diameters [um]
-    * 2nd column --> void ratio or porosity [-]. Assumes it is void ratio
+  * **input_cpd** --> is a two columns txt file from existing cpd
+    * _1st column_ --> diameters [um]
+    * _2nd column_ --> void ratio or porosity [-]. Assumes it is void ratio
 
-* Input parameters are in class Inputs and InputsGtec:
-  * Inputs --> geometrical input parameters
-    * intervals --> psd intervals
-    * dmax --> distribution max limit [um]
-    * dmin --> distributions min limit [um]
+* ### Input parameters:
+  * **Inputs** --> geometrical input parameters
+    * _Inputs.intervals_ --> psd intervals
+    * _Inputs.dmax_ --> distribution max limit [um]
+    * _Inputs.dmin_ --> distributions min limit [um]
 
-  * InputsGtec --> physical input parameters
-    * Gs --> specific gravity
-    * Ms --> MIP sample dry mass
-    * w --> water content
-    * teta --> contact angle [degres]
-    * surf_tension --> surface tension [N/m]
+  * **InputsGtec** --> physical input parameters
+    * _InputsGtec.Gs_ --> specific gravity
+    * _InputsGtec.Ms_ --> MIP sample dry mass
+    * _InputsGtec.w_ --> water content
+    * _InputsGtec.teta_ --> contact angle [degres]
+    * _InputsGtec.surf_tension_ --> surface tension [N/m]
 
-* Methods:
-  * plot_data --> plots psd and cpd
-  * plot_mip --> plots psd and cpd against expected e
-  * save_output --> saves psd and cpd on txt
-  * psd_from_cpd --> computes psd
-  * cpd_from_mip --> import cpd from MIP
-  * cpd_from_file --> import cpd from txt file
-  * cpd_from_array --> create cpd from d and e array
-  * cpd.sort_cpd --> order cpd from smaller to larger diameters
-  * cpd.reverse_cpd -->         reverse cpd order
+* ### Methods:
+  * _plot_data_ --> plots psd and cpd
+  * _plot_mip_ --> plots psd and cpd against expected e
+  * _save_output_ --> saves psd and cpd on txt
+  * _psd_from_cpd_ --> computes psd
+  * _cpd_from_mip_ --> import cpd from MIP
+  * _cpd_from_file_ --> import cpd from txt file
+  * _cpd_from_array_ --> create cpd from d and e array
+  * _cpd.sort_cpd_ --> order cpd from smaller to larger diameters
+  * _cpd.reverse_cpd_ --> reverse cpd order
 
-* Classes:
-  * Inputs --> geometrical input parameters
-  * InputsGtec --> physical input parameters
-  * PSD --> psd
-  * CPD --> cpd
+* ### Classes:
+  * _Inputs_ --> geometrical input parameters
+  * _InputsGtec_ --> physical input parameters
+  * _PSD_ --> psd
+  * _CPD_ --> cpd
 
   Created on 29/10/2019
   MIT License - Copyright (c) 2019 Matteo Pedrotti
+
   @author: PedroMat8
   @email: matteo.pedrotti@strath.ac.uk
