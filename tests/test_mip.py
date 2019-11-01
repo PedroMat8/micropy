@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pore_sizer import pore_distribution as pore
+from src import pore_distribution as pore
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
                    'surf_tension': surf_tension}
 
     data = pore.DataElaboration(inputs)
-    data.cpd_from_mip('input/input_mip.txt', inputs_gtec)
+    data.cpd_from_mip('input_mip.txt', inputs_gtec)
     data.cpd.sort_cpd()
     data.psd_from_cpd()
     data.plot_mip(inputs_gtec)

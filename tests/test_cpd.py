@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pore_sizer import pore_distribution as pore
+from src import pore_distribution as pore
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
             }
 
     data = pore.DataElaboration(inputs)
-    data.cpd_from_file('input/input_cpd.txt')
+    data.cpd_from_file('input_cpd.txt')
     data.cpd.sort_cpd()
     data.psd_from_cpd()
     data.plot_data()

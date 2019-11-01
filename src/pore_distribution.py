@@ -46,7 +46,7 @@ class DataElaboration:
 
     def save_output(self):
         np.savetxt(
-                'output/output.txt',
+                'output.txt',
                 np.transpose([self.cpd.d, self.cpd.e, self.psd.d, self.psd.e]),
                 header=('diameters_cpd\tvoid_ratio_cpd\tdiameters_psd\t' +
                         'void_ratio_psd'), delimiter='\t')
