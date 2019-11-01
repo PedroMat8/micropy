@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pore_sizer",
-    version="0.0.2",
+    name="micropy",
+    version="0.3",
     author="Matteo Pedrotti",
     author_email="matteo.pedrotti@strath.ac.uk",
     description="Tool to investigate pore space",
