@@ -54,5 +54,5 @@ existing data.
 
   Please cite:
   [![DOI](https://www.zenodo.org/badge/218507773.svg)](https://www.zenodo.org/badge/latestdoi/218507773)
-  @author: Matteo Pedrotti
-  @email: matteo.pedrotti@strath.ac.uk
+  author: Matteo Pedrotti
+  email: matteo.pedrotti@strath.ac.uk

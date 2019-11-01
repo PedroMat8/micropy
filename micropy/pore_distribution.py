@@ -69,9 +69,13 @@ class DataElaboration:
     def cpd_from_array(self, d, e):
 
         def delta_e(e, d, d_cpd, idx, i):
-            value = (((e[idx]-e[idx-1]) / (d[idx]-d[idx-1]) *
-                      (d_cpd[i]-d[idx])))
+            value = (((e[idx]-e[idx-1]) / (np.log(d[idx])-np.log(d[idx-1])) *
+                      (np.log(d_cpd[i])-np.log(d[idx]))))
             return value
+
+        if len(d) < self.inputs.intervals:
+            print('Too many intervals. Reduced to ', len(d))
+            self.inputs.intervals = len(d)
 
         self.cpd.d = np.append(self.cpd.d, self.inputs.dmin)
         idx = (np.abs(d - self.cpd.d[0])).argmin()
@@ -96,6 +100,9 @@ class DataElaboration:
         Vs = gtec.Ms/gtec.Gs*1000
         e = v/Vs
         dd = -4*gtec.surf_tension*np.cos(np.radians(gtec.teta))/p
+        if len(dd) < self.inputs.intervals:
+            print('Too many intervals. Reduced to ', len(dd))
+            self.inputs.intervals = len(dd)
 
         print('Max available diameter [um]: ', np.max(dd))
         print('Min available diameter [um]: ', np.min(dd))
@@ -119,6 +126,9 @@ class DataElaboration:
 
         print('Max available diameter [um]: ', np.max(d))
         print('Min available diameter [um]: ', np.min(d))
+        if len(d) < self.inputs.intervals:
+            print('Too many intervals. Reduced to ', len(d))
+            self.inputs.intervals = len(d)
 
         if self.inputs.dmax > np.max(d):
             new_dmax = input('dmax is too large, input new diameter < ' + str(

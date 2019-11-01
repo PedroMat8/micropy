@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src import pore_distribution as pore
+from micropy import pore_distribution as pore
 
 
 def main():

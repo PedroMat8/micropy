@@ -5,7 +5,7 @@ from tests import test_mip_reverse as reverse
 
 def main():
 
-    cpd.main()
+    pd.main()
     mip.main()
     reverse.main()
 
