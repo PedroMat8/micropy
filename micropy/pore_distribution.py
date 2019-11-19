@@ -56,10 +56,12 @@ class DataElaboration:
         self.psd.e = np.append(self.psd.e, 0)
 
         for i in range(np.size(self.cpd.d, 0)-1):
-            foo = np.exp((np.log(self.cpd.d[i]) +
-                          np.log(self.cpd.d[i+1])) / 2)
+            foo = 10**((np.log10(self.cpd.d[i]) +
+                          np.log10(self.cpd.d[i+1])) / 2)
+
             foo1 = (self.cpd.e[i+1]-self.cpd.e[i])/(
-                            np.log(self.cpd.d[i+1]/self.cpd.d[i]))
+                            np.log10(self.cpd.d[i+1]/self.cpd.d[i]))
+
             if np.argmax(self.cpd.e) == 0:  # reverse cpd
                 foo1 = -1*foo1
 
@@ -67,10 +69,12 @@ class DataElaboration:
             self.psd.e = np.append(self.psd.e, foo1)
 
     def cpd_from_array(self, d, e):
+        # "it needs to start from arrays having smaller diameter and smaller void ratio""
+        [d, e] = self.sort_cpd(d, e)
 
         def delta_e(e, d, d_cpd, idx, i):
-            value = (((e[idx]-e[idx-1]) / (np.log(d[idx])-np.log(d[idx-1])) *
-                      (np.log(d_cpd[i])-np.log(d[idx]))))
+            value = (((e[idx]-e[idx-1]) / (np.log10(d[idx])-np.log10(d[idx-1])) *
+                      (np.log10(d_cpd[i])-np.log10(d[idx-1]))))
             return value
 
         if len(d) < self.inputs.intervals:
@@ -78,19 +82,25 @@ class DataElaboration:
             self.inputs.intervals = len(d)
 
         self.cpd.d = np.append(self.cpd.d, self.inputs.dmin)
-        idx = (np.abs(d - self.cpd.d[0])).argmin()
-        incr = delta_e(e, d, self.cpd.d, idx, 0)
-        self.cpd.e = np.append(self.cpd.e, (e[idx] - incr))
+        self.cpd.e = np.append(self.cpd.e, 0)
 
-        delta_log = ((np.log(self.inputs.dmax)-np.log(self.inputs.dmin)) /
+        delta_log = ((np.log10(self.inputs.dmax)-np.log10(self.inputs.dmin)) /
                      (self.inputs.intervals-1))
 
         for i in range(1, self.inputs.intervals):
             self.cpd.d = (np.append(self.cpd.d,
-                                    np.exp(np.log(self.cpd.d[i-1])+delta_log)))
-            idx = (np.abs(d - self.cpd.d[i])).argmin()
+                                    10**(np.log10(self.cpd.d[i-1])+delta_log)))
+            for diam in d:
+                if diam > self.cpd.d[i]:
+                    idx, = np.where(d == diam)
+                    break
+
             incr = delta_e(e, d, self.cpd.d, idx, i)
-            self.cpd.e = (np.append(self.cpd.e, (e[idx]-incr)))
+            if incr < 0:
+                print('cdp from_array WARNING: void ratio increment negative!')
+                break
+
+            self.cpd.e = (np.append(self.cpd.e, (e[idx-1]+incr)))
 
     def cpd_from_mip(self, input_file, inputs_gtec):
         gtec = self.InputsGtec(inputs_gtec)
@@ -142,6 +152,22 @@ class DataElaboration:
 
         self.cpd_from_array(d, e)
 
+    @staticmethod
+    def sort_cpd(d, e):
+        if np.argmax(d) == np.argmax(e):
+            d = np.sort(d)
+            e = np.sort(e)
+            return d, e
+
+        elif d[0] > d[-1]:
+            d = np.sort(d)
+            e = np.sort(max(e)-e)
+            return d, e
+
+        elif e[0] > e[-1]:
+            e = (max(e)-e)
+            return d, e
+
     class Inputs:
         def __init__(self, inputs):
             self.intervals = inputs['intervals']
@@ -162,18 +188,8 @@ class DataElaboration:
             self.e = []
 
     class CPD(PSD):
-        def sort_cpd(self):
-            if np.argmax(self.d) == np.argmax(self.e):
-                self.d = np.sort(self.d)
-                self.e = np.sort(self.e)
-
-            elif np.argmax(self.d) == 0:
-                self.d = np.sort(self.d)
-                self.e = np.sort(max(self.e)-self.e)
-
-            elif np.argmax(self.e) == 0:
-                self.e = np.sort(max(self.e)-self.e)
 
         def reverse_cpd(self):
-            self.sort_cpd()
+            [self.d, self.e] = self.sort_cpd(self.d, self.e)
             self.e = np.sort(max(self.e)-self.e)[::-1]
+            return self
