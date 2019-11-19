@@ -38,7 +38,7 @@ existing data.
   * _cpd_from_mip_ --> import cpd from MIP
   * _cpd_from_file_ --> import cpd from txt file
   * _cpd_from_array_ --> create cpd from d and e array
-  * _cpd.sort_cpd_ --> order cpd from smaller to larger diameters
+  * _sort_cpd_ --> order cpd from smaller to larger diameters
   * _cpd.reverse_cpd_ --> reverse cpd order
 
 * ### Classes:
