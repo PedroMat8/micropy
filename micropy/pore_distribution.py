@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 
 class DataElaboration:
     """ Returns PSD and CPD from MIP output"""
-
     def __init__(self, inputs):
         self.psd = self.PSD()
         self.cpd = self.CPD()
@@ -30,51 +29,37 @@ class DataElaboration:
         else:
             e = [float(input('Input void ratio: '))]
 
-        fig, axs = self.plot_data()
+        axs = self.plot_data()
         axs[1].semilogx(
                 self.cpd.d, ([e] * len(self.cpd.d)))
 
-    def plot_data(self):
+    @staticmethod
+    def plot_data(cpd_d, cpd_e, psd_d, psd_e):
         """Plot cpd and psd"""
         fig, axs = plt.subplots(2)
         fig.suptitle('Distributions')
-        axs[0].semilogx(self.psd.d, self.psd.e)
+        axs[0].semilogx(psd_d, psd_e)
         axs[0].set(xlabel='diameters [um]', ylabel='frequency de/d(logd)')
-        axs[1].semilogx(self.cpd.d, self.cpd.e)
+        axs[1].semilogx(cpd_d, cpd_e)
         axs[1].set(xlabel='diameters [um]', ylabel='void ratio [e]')
         return fig, axs
 
     def save_output(self):
+        """Savve outputs"""
         np.savetxt(
                 'output.txt',
                 np.transpose([self.cpd.d, self.cpd.e, self.psd.d, self.psd.e]),
                 header=('diameters_cpd\tvoid_ratio_cpd\tdiameters_psd\t' +
                         'void_ratio_psd'), delimiter='\t')
 
-    def psd_from_cpd(self):
-        self.psd.d = np.append(self.psd.d, 0)
-        self.psd.e = np.append(self.psd.e, 0)
-
-        for i in range(np.size(self.cpd.d, 0)-1):
-            foo = 10**((np.log10(self.cpd.d[i]) +
-                          np.log10(self.cpd.d[i+1])) / 2)
-
-            foo1 = (self.cpd.e[i+1]-self.cpd.e[i])/(
-                            np.log10(self.cpd.d[i+1]/self.cpd.d[i]))
-
-            if np.argmax(self.cpd.e) == 0:  # reverse cpd
-                foo1 = -1*foo1
-
-            self.psd.d = np.append(self.psd.d, foo)
-            self.psd.e = np.append(self.psd.e, foo1)
-
     def cpd_from_array(self, d, e):
-        # "it needs to start from arrays having smaller diameter and smaller void ratio""
+        """Get cpd from array"""
         [d, e] = self.sort_cpd(d, e)
 
         def delta_e(e, d, d_cpd, idx, i):
-            value = (((e[idx]-e[idx-1]) / (np.log10(d[idx])-np.log10(d[idx-1])) *
-                      (np.log10(d_cpd[i])-np.log10(d[idx-1]))))
+            value = ((e[idx]-e[idx-1]) / (
+                    np.log10(d[idx])-np.log10(d[idx-1])) * (
+                            np.log10(d_cpd[i])-np.log10(d[idx-1])))
             return value
 
         if len(d) < self.inputs.intervals:
@@ -103,6 +88,7 @@ class DataElaboration:
             self.cpd.e = (np.append(self.cpd.e, (e[idx-1]+incr)))
 
     def cpd_from_mip(self, input_file, inputs_gtec):
+        """Get cpd from MIP"""
         gtec = self.InputsGtec(inputs_gtec)
         alf = np.loadtxt(input_file, usecols=(0, 1), skiprows=0)
         p = alf[:, 0]*0.00689475908677536  # [MPa]
@@ -130,6 +116,7 @@ class DataElaboration:
         self.cpd_from_array(dd, e)
 
     def cpd_from_file(self, input_file):
+        """Get cpd from txt file"""
         alf = np.loadtxt(input_file, usecols=(0, 1), skiprows=0)
         d = alf[:, 0]
         e = alf[:, 1]
@@ -152,8 +139,14 @@ class DataElaboration:
 
         self.cpd_from_array(d, e)
 
+    def norm_dist(self):
+        """Get normalized distributions"""
+        self.cpd.norm_cpd()
+        self.psd.norm_psd(self.cpd.d, self.cpd.e)
+
     @staticmethod
     def sort_cpd(d, e):
+        """Sort cpd"""
         if np.argmax(d) == np.argmax(e):
             d = np.sort(d)
             e = np.sort(e)
@@ -186,10 +179,40 @@ class DataElaboration:
         def __init__(self):
             self.d = []
             self.e = []
+            self.norm = []
+
+        @staticmethod
+        def psd_from_cpd(cpd_d, cpd_e):
+            """Create psd from cpd"""
+            psd_d = []
+            psd_e = []
+
+            for i in range(np.size(cpd_d, 0)-1):
+                foo = 10**((np.log10(cpd_d[i]) + np.log10(cpd_d[i+1])) / 2)
+                foo1 = (cpd_e[i+1]-cpd_e[i])/(np.log10(cpd_d[i+1]/cpd_d[i]))
+
+                if np.argmax(cpd_e) == 0:  # reverse cpd
+                    foo1 = -1*foo1
+
+                psd_d = np.append(psd_d, foo)
+                psd_e = np.append(psd_e, foo1)
+
+            return psd_d, psd_e
+
+        def norm_psd(self, cpd_d, cpd_e):
+            """Normalize psd"""
+            cpd_norm = cpd_e / np.max(cpd_e)
+            [foo, psd_norm] = DataElaboration.PSD.psd_from_cpd(cpd_d, cpd_norm)
+            self.norm = np.append(self.norm, psd_norm)
 
     class CPD(PSD):
-
         def reverse_cpd(self):
+            """Reverse cpd"""
             [self.d, self.e] = self.sort_cpd(self.d, self.e)
             self.e = np.sort(max(self.e)-self.e)[::-1]
             return self
+
+        def norm_cpd(self):
+            """Normalize cpd"""
+            cpd_norm = self.e / np.max(self.e)
+            self.norm = np.append(self.norm, cpd_norm)

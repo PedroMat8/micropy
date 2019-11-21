@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from micropy import pore_distribution as pore
+import matplotlib.pyplot as plt
 
 
 def main():
@@ -23,7 +24,11 @@ def main():
     data.cpd.sort_cpd()
     data.psd_from_cpd()
     data.plot_data()
-    data.save_output()
+#    data.save_output()
+    e_norm = data.psd.normal_psd()
+    frequency = data.psd.numb_psd()
+    plt.plot(data.psd.d, e_norm)
+    plt.plot(data.psd.d, frequency)
 
 
 if __name__ == "__main__":

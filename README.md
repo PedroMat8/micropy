@@ -31,15 +31,18 @@ existing data.
     * _InputsGtec.surf_tension_ --> surface tension [N/m]
 
 * ### Methods:
-  * _plot_data_ --> plots psd and cpd
+  * _plot_data_ --> plots psd and cpd (static method)
   * _plot_mip_ --> plots psd and cpd against expected e
   * _save_output_ --> saves psd and cpd on txt
-  * _psd_from_cpd_ --> computes psd
   * _cpd_from_mip_ --> import cpd from MIP
   * _cpd_from_file_ --> import cpd from txt file
   * _cpd_from_array_ --> create cpd from d and e array
-  * _sort_cpd_ --> order cpd from smaller to larger diameters
+  * _sort_cpd_ --> order cpd from smaller to larger diameters (static method)
+  * _norm_dist_ --> normalize distributions
+  * _psd.psd_from_cpd_ --> computes psd (static method)
+  * _psd.norm_psd_ --> normalize psd
   * _cpd.reverse_cpd_ --> reverse cpd order
+  * _cpd.norm_cpd_ --> normalize cpd
 
 * ### Classes:
   * _Inputs_ --> geometrical input parameters
