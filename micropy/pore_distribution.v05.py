@@ -11,7 +11,6 @@ MIT License - Copyright (c) 2019 Matteo Pedrotti
 
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
 
 
 class DataElaboration:
@@ -59,7 +58,7 @@ class DataElaboration:
 
         def delta_e(e, d, d_cpd, idx, i):
             value = ((e[idx]-e[idx-1]) / (
-                    np.log10(d[idx])-np.log10(d[idx-1])) * multiplier*(
+                    np.log10(d[idx])-np.log10(d[idx-1])) * (
                             np.log10(d_cpd[i])-np.log10(d[idx-1])))
             return value
 
@@ -79,14 +78,9 @@ class DataElaboration:
             for diam in d:
                 if diam > self.cpd.d[i]:
                     idx, = np.where(d == diam)
-                    multiplier = 1
-                    if idx ==0:
-                        idx+=1
-                        multiplier = -1
                     break
 
             incr = delta_e(e, d, self.cpd.d, idx, i)
-
             if incr < 0:
                 print('cdp from_array WARNING: void ratio increment negative!')
                 break
@@ -190,8 +184,6 @@ class DataElaboration:
         @staticmethod
         def psd_from_cpd(cpd_d, cpd_e):
             """Create psd from cpd"""
-            [cpd_d, cpd_e] = DataElaboration.sort_cpd(cpd_d, cpd_e)
-
             psd_d = []
             psd_e = []
 
@@ -199,13 +191,11 @@ class DataElaboration:
                 foo = 10**((np.log10(cpd_d[i]) + np.log10(cpd_d[i+1])) / 2)
                 foo1 = (cpd_e[i+1]-cpd_e[i])/(np.log10(cpd_d[i+1]/cpd_d[i]))
 
-#                if np.argmax(cpd_e) == 0:  # reverse cpd
-#                    foo1 = -1*foo1
+                if np.argmax(cpd_e) == 0:  # reverse cpd
+                    foo1 = -1*foo1
 
                 psd_d = np.append(psd_d, foo)
                 psd_e = np.append(psd_e, foo1)
-                if foo1 < 0:
-                    sys.exit('negative psd')
 
             return psd_d, psd_e
 
