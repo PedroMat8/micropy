@@ -12,6 +12,7 @@ MIT License - Copyright (c) 2019 Matteo Pedrotti
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
+from numba import jit
 
 
 class DataElaboration:
@@ -46,52 +47,60 @@ class DataElaboration:
         return fig, axs
 
     def save_output(self):
-        """Savve outputs"""
+        """Save outputs"""
         np.savetxt(
                 'output.txt',
                 np.transpose([self.cpd.d, self.cpd.e, self.psd.d, self.psd.e]),
                 header=('diameters_cpd\tvoid_ratio_cpd\tdiameters_psd\t' +
                         'void_ratio_psd'), delimiter='\t')
 
-    def cpd_from_array(self, d, e):
-        """Get cpd from array"""
-        [d, e] = self.sort_cpd(d, e)
+    @staticmethod
+    def interpolate_e(d_min, d_max, d_starting, e_starting, intervals):
+        """d_new and e_new are empty lists"""
+        d_new = []
+        e_new = []
+        delta_log = ((np.log10(d_max)-np.log10(d_min)) / (intervals-1))
+        d_new = np.append(d_new, d_min)
+        e_new = np.append(e_new, 0)
 
-        def delta_e(e, d, d_cpd, idx, i):
+        @jit(nopython=True, fastmath=True)
+        def delta_e(e, d, d_cpd, idx, i, multiplier):
             value = ((e[idx]-e[idx-1]) / (
                     np.log10(d[idx])-np.log10(d[idx-1])) * multiplier*(
                             np.log10(d_cpd[i])-np.log10(d[idx-1])))
             return value
 
-        if len(d) < self.inputs.intervals:
-            print('Too many intervals. Reduced to ', len(d))
-            self.inputs.intervals = len(d)
-
-        self.cpd.d = np.append(self.cpd.d, self.inputs.dmin)
-        self.cpd.e = np.append(self.cpd.e, 0)
-
-        delta_log = ((np.log10(self.inputs.dmax)-np.log10(self.inputs.dmin)) /
-                     (self.inputs.intervals-1))
-
-        for i in range(1, self.inputs.intervals):
-            self.cpd.d = (np.append(self.cpd.d,
-                                    10**(np.log10(self.cpd.d[i-1])+delta_log)))
-            for diam in d:
-                if diam > self.cpd.d[i]:
-                    idx, = np.where(d == diam)
+        for i in range(1, intervals):
+            d_new = (np.append(d_new,
+                                    10**(np.log10(d_new[i-1])+delta_log)))
+            for diam in d_starting:
+                if diam > d_new[i]:
+                    idx, = np.where(d_starting == diam)
                     multiplier = 1
                     if idx ==0:
                         idx+=1
                         multiplier = -1
                     break
 
-            incr = delta_e(e, d, self.cpd.d, idx, i)
+            incr = delta_e(e_starting, d_starting, d_new, idx, i, multiplier)
 
             if incr < 0:
-                print('cdp from_array WARNING: void ratio increment negative!')
+#                print('cdp from_array WARNING: void ratio increment negative!')
                 break
 
-            self.cpd.e = (np.append(self.cpd.e, (e[idx-1]+incr)))
+            e_new = (np.append(e_new, (e_starting[idx-1]+incr)))
+
+            if np.size(d_new) != np.size(e_new):
+#                print(' Warning e and d are not the same size')
+                sys.exit()
+
+        return d_new, e_new
+
+    def cpd_from_array(self, d, e):
+        """Get cpd from array"""
+        [d, e] = self.sort_cpd(d, e)
+#        [self.cpd.d, self.cpd.e] = DataElaboration.interpolate_e(self.cpd.d, self.cpd.e, self.inputs.dmin, self.inputs.dmax, d, e, self.inputs.intervals)
+        [self.cpd.d, self.cpd.e] = DataElaboration.interpolate_e(self.inputs.dmin, self.inputs.dmax, d, e, self.inputs.intervals)
 
     def cpd_from_mip(self, input_file, inputs_gtec):
         """Get cpd from MIP"""
@@ -101,7 +110,7 @@ class DataElaboration:
         v = alf[:, 1]*1000  # [mm3]
         Vs = gtec.Ms/gtec.Gs*1000
         e = v/Vs
-        dd = -4*gtec.surf_tension*np.cos(np.radians(gtec.teta))/p
+        dd = -2*0.48*np.cos(np.radians(147))/p  # parallel plates
         if len(dd) < self.inputs.intervals:
             print('Too many intervals. Reduced to ', len(dd))
             self.inputs.intervals = len(dd)

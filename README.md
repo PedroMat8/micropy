@@ -10,11 +10,11 @@ existing data.
 
 * ### Input files:
   * **input_mip** --> is a two columns txt file from MIP analysis
-    * _1st column_ --> Intrusion pressure [PSI]
+    * _1st column_ --> Intrusion pressure [PSI]. Assumes Washburn parallel plates
     * _2nd column_ --> Intruded volume [cc]
 
   * **input_cpd** --> is a two columns txt file from existing cpd
-    * _1st column_ --> diameters [um]
+    * _1st column_ --> diameters [um].
     * _2nd column_ --> void ratio or porosity [-]. Assumes it is void ratio
 
 * ### Input parameters:
@@ -31,18 +31,19 @@ existing data.
     * _InputsGtec.surf_tension_ --> surface tension [N/m]
 
 * ### Methods:
-  * _plot_data_ --> plots psd and cpd (static method)
   * _plot_mip_ --> plots psd and cpd against expected e
+  * _plot_data_ --> plots psd and cpd (staticmethod)
   * _save_output_ --> saves psd and cpd on txt
-  * _cpd_from_mip_ --> import cpd from MIP
-  * _cpd_from_file_ --> import cpd from txt file
-  * _cpd_from_array_ --> create cpd from d and e array
-  * _sort_cpd_ --> order cpd from smaller to larger diameters (static method)
-  * _norm_dist_ --> normalize distributions
+  * _interpolate_e_ --> interpolates e_cum for a new set of intervals (staticmethod)
+  * _cpd_from_array_ --> creates cpd from d and e array
+  * _cpd_from_mip_ --> imports cpd from MIP. Assumes parallel plates
+  * _cpd_from_file_ --> imports cpd from txt file
+  * _norm_dist_ --> normalizes distributions
+  * _sort_cpd_ --> orders cpd from smaller to larger diameters (static method)
   * _psd.psd_from_cpd_ --> computes psd (static method)
-  * _psd.norm_psd_ --> normalize psd
-  * _cpd.reverse_cpd_ --> reverse cpd order
-  * _cpd.norm_cpd_ --> normalize cpd
+  * _psd.norm_psd_ --> normalizes psd
+  * _cpd.reverse_cpd_ --> reverses cpd order
+  * _cpd.norm_cpd_ --> normalizes cpd
 
 * ### Classes:
   * _Inputs_ --> geometrical input parameters
