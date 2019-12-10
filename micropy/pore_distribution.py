@@ -47,7 +47,7 @@ class DataElaboration:
         return fig, axs
 
     def save_output(self):
-        """Save outputs"""
+        """Savve outputs"""
         np.savetxt(
                 'output.txt',
                 np.transpose([self.cpd.d, self.cpd.e, self.psd.d, self.psd.e]),
@@ -225,11 +225,11 @@ class DataElaboration:
             self.norm = np.append(self.norm, psd_norm)
 
     class CPD(PSD):
-        def reverse_cpd(self):
-            """Reverse cpd"""
-            [self.d, self.e] = self.sort_cpd(self.d, self.e)
-            self.e = np.sort(max(self.e)-self.e)[::-1]
-            return self
+#        def reverse_cpd(self):
+#            """Reverse cpd"""
+#            [self.d, self.e] = DataElaboration.sort_cpd(self.d, self.e)
+#            self.e = (max(self.e)-self.e)[::-1]
+#            return self
 
         def norm_cpd(self):
             """Normalize cpd"""
