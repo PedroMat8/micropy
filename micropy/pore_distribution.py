@@ -18,9 +18,10 @@ from numba import jit
 class DataElaboration:
     """ Returns PSD and CPD from MIP output"""
     def __init__(self, inputs):
-        self.psd = self.PSD()
-        self.cpd = self.CPD()
         self.inputs = self.Inputs(inputs)
+        self.psd = self.PSD(self.inputs.intervals)
+        self.cpd = self.CPD(self.inputs.intervals)
+
 
     def plot_mip(self, inputs_gtec):
         """Plot cpd and psd against expected void ratio"""
@@ -57,42 +58,16 @@ class DataElaboration:
     @staticmethod
     def interpolate_e(d_min, d_max, d_starting, e_starting, intervals):
         """d_new and e_new are empty lists"""
-        d_new = []
-        e_new = []
+
         delta_log = ((np.log10(d_max)-np.log10(d_min)) / (intervals-1))
-        d_new = np.append(d_new, d_min)
-        e_new = np.append(e_new, 0)
-
-        @jit(nopython=True, fastmath=True)
-        def delta_e(e, d, d_cpd, idx, i, multiplier):
-            value = ((e[idx]-e[idx-1]) / (
-                    np.log10(d[idx])-np.log10(d[idx-1])) * multiplier*(
-                            np.log10(d_cpd[i])-np.log10(d[idx-1])))
-            return value
-
-        for i in range(1, intervals):
-            d_new = (np.append(d_new,
-                                    10**(np.log10(d_new[i-1])+delta_log)))
-            for diam in d_starting:
-                if diam > d_new[i]:
-                    idx, = np.where(d_starting == diam)
-                    multiplier = 1
-                    if idx ==0:
-                        idx+=1
-                        multiplier = -1
-                    break
-
-            incr = delta_e(e_starting, d_starting, d_new, idx, i, multiplier)
-
-            if incr < 0:
-#                print('cdp from_array WARNING: void ratio increment negative!')
-                break
-
-            e_new = (np.append(e_new, (e_starting[idx-1]+incr)))
-
-            if np.size(d_new) != np.size(e_new):
-#                print(' Warning e and d are not the same size')
-                sys.exit()
+        d_starting_log = np.log10(d_starting)
+        e_new = np.empty(intervals)
+        
+        n = np.arange(0, intervals)
+        ndlog = np.multiply(n ,delta_log)
+        d_new_log = np.add(np.log10(d_min), ndlog)
+        d_new = 10**d_new_log
+        e_new = np.interp(d_new_log, d_starting_log, e_starting)
 
         return d_new, e_new
 
@@ -191,28 +166,27 @@ class DataElaboration:
             self.surf_tension = inputs['surf_tension']
 
     class PSD:
-        def __init__(self):
-            self.d = []
-            self.e = []
-            self.norm = []
+        def __init__(self, intervals):
+            dim = intervals
+            self.d = np.empty(dim)
+            self.e = np.empty(dim)
+            self.norm = np.empty(dim)
 
         @staticmethod
         def psd_from_cpd(cpd_d, cpd_e):
             """Create psd from cpd"""
             [cpd_d, cpd_e] = DataElaboration.sort_cpd(cpd_d, cpd_e)
+            
+            alf = np.size(cpd_d, 0)
+            psd_d = np.empty(alf-1)
+            psd_e = np.empty(alf-1)
 
-            psd_d = []
-            psd_e = []
-
-            for i in range(np.size(cpd_d, 0)-1):
+            for i in range(alf-1):
                 foo = 10**((np.log10(cpd_d[i]) + np.log10(cpd_d[i+1])) / 2)
                 foo1 = (cpd_e[i+1]-cpd_e[i])/(np.log10(cpd_d[i+1]/cpd_d[i]))
 
-#                if np.argmax(cpd_e) == 0:  # reverse cpd
-#                    foo1 = -1*foo1
-
-                psd_d = np.append(psd_d, foo)
-                psd_e = np.append(psd_e, foo1)
+                psd_d[i] = foo
+                psd_e[i] = foo1
                 if foo1 < 0:
                     sys.exit('negative psd')
 
@@ -222,7 +196,8 @@ class DataElaboration:
             """Normalize psd"""
             cpd_norm = cpd_e / np.max(cpd_e)
             [foo, psd_norm] = DataElaboration.PSD.psd_from_cpd(cpd_d, cpd_norm)
-            self.norm = np.append(self.norm, psd_norm)
+            # self.norm = np.append(self.norm, psd_norm)
+            self.norm = psd_norm
 
     class CPD(PSD):
 #        def reverse_cpd(self):
@@ -234,4 +209,5 @@ class DataElaboration:
         def norm_cpd(self):
             """Normalize cpd"""
             cpd_norm = self.e / np.max(self.e)
-            self.norm = np.append(self.norm, cpd_norm)
+            # self.norm = np.append(self.norm, cpd_norm)
+            self.norm = cpd_norm
