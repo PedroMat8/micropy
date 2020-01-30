@@ -7,6 +7,7 @@ MIT License - Copyright (c) 2019 Matteo Pedrotti
 
 @author: PedroMat8
 @email: matteo.pedrotti@strath.ac.uk
+THIS IS A TEST
 """
 
 import numpy as np
