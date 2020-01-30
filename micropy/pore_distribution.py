@@ -7,7 +7,6 @@ MIT License - Copyright (c) 2019 Matteo Pedrotti
 
 @author: PedroMat8
 @email: matteo.pedrotti@strath.ac.uk
-THIS IS A second TEST
 """
 
 import numpy as np
@@ -63,7 +62,7 @@ class DataElaboration:
         delta_log = ((np.log10(d_max)-np.log10(d_min)) / (intervals-1))
         d_starting_log = np.log10(d_starting)
         e_new = np.empty(intervals)
-        
+
         n = np.arange(0, intervals)
         ndlog = np.multiply(n ,delta_log)
         d_new_log = np.add(np.log10(d_min), ndlog)
@@ -177,7 +176,7 @@ class DataElaboration:
         def psd_from_cpd(cpd_d, cpd_e):
             """Create psd from cpd"""
             [cpd_d, cpd_e] = DataElaboration.sort_cpd(cpd_d, cpd_e)
-            
+
             alf = np.size(cpd_d, 0)
             psd_d = np.empty(alf-1)
             psd_e = np.empty(alf-1)
