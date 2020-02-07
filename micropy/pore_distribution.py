@@ -15,7 +15,7 @@ import sys
 from numba import jit
 
 
-class DataElaboration:
+class DataElaboration():
     """ Returns PSD and CPD from MIP output"""
     def __init__(self, inputs):
         self.inputs = self.Inputs(inputs)
@@ -137,19 +137,30 @@ class DataElaboration:
     @staticmethod
     def sort_cpd(d, e):
         """Sort cpd"""
-        if np.argmax(d) == np.argmax(e):
-            d = np.sort(d)
-            e = np.sort(e)
-            return d, e
+        if d[0] >= d[-1]:
+            if e[0] >= e[-1]:
+                return np.sort(d), np.sort(e)
+            else:
+                return np.sort(d), np.sort(max(e)-e)
+        else:
+            if e[0] <= e[-1]:
+                return np.sort(d), np.sort(e)
+            else:
+                return np.sort(d), np.sort(max(e)-e)
 
-        elif d[0] > d[-1]:
-            d = np.sort(d)
-            e = np.sort(max(e)-e)
-            return d, e
+        # if np.argmax(d) == np.argmax(e):
+        #     d = np.sort(d)
+        #     e = np.sort(e)
+        #     return d, e
 
-        elif e[0] > e[-1]:
-            e = (max(e)-e)
-            return d, e
+        # elif d[0] > d[-1]:
+        #     d = np.sort(d)
+        #     e = np.sort(max(e)-e)
+        #     return d, e
+
+        # elif e[0] > e[-1]:
+        #     e = (max(e)-e)
+        #     return d, e
 
     class Inputs:
         def __init__(self, inputs):
@@ -200,11 +211,6 @@ class DataElaboration:
             self.norm = psd_norm
 
     class CPD(PSD):
-#        def reverse_cpd(self):
-#            """Reverse cpd"""
-#            [self.d, self.e] = DataElaboration.sort_cpd(self.d, self.e)
-#            self.e = (max(self.e)-self.e)[::-1]
-#            return self
 
         def norm_cpd(self):
             """Normalize cpd"""
