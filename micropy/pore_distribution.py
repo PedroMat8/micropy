@@ -48,12 +48,10 @@ class DataElaboration():
         return fig, axs
 
     def save_output(self):
-        """Savve outputs"""
-        np.savetxt(
-                'output.txt',
-                np.transpose([self.cpd.d, self.cpd.e, self.psd.d, self.psd.e]),
-                header=('diameters_cpd\tvoid_ratio_cpd\tdiameters_psd\t' +
-                        'void_ratio_psd'), delimiter='\t')
+        """Save outputs"""
+        matrix = np.column_stack((self.cpd.d, self.cpd.e, np.append(self.psd.d,0), np.append(self.psd.e,0)))
+        header=('diameters_cpd\tvoid_ratio_cpd\tdiameters_psd\tvoid_ratio_psd')
+        np.savetxt('output.txt', matrix, header=header, delimiter='\t', fmt='%s')
 
     @staticmethod
     def interpolate_e(d_min, d_max, d_starting, e_starting, intervals):
