@@ -57,6 +57,8 @@ existing data.
   MIT License - Copyright (c) 2019 Matteo Pedrotti
 
   Please cite:
+  https://doi.org/10.5281/zenodo.3524929
+  
   [![DOI](https://www.zenodo.org/badge/218507773.svg)](https://www.zenodo.org/badge/latestdoi/218507773)
   author: Matteo Pedrotti
   email: matteo.pedrotti@strath.ac.uk
