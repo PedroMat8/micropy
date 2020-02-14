@@ -51,12 +51,15 @@ existing data.
   * _PSD_ --> psd
   * _CPD_ --> cpd
 
-
   created : 29/10/2019
   username: PedroMat8
   MIT License - Copyright (c) 2019 Matteo Pedrotti
 
-  Please cite:
-  [![DOI](https://www.zenodo.org/badge/218507773.svg)](https://www.zenodo.org/badge/latestdoi/218507773)
+  Please cite the following DOI:
+  10.5281/zenodo.3524929
+
+  Information on the module are found:
+  https://github.com/PedroMat8/micropy
+
   author: Matteo Pedrotti
   email: matteo.pedrotti@strath.ac.uk

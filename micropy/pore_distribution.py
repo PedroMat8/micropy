@@ -7,6 +7,9 @@ MIT License - Copyright (c) 2019 Matteo Pedrotti
 
 @author: PedroMat8
 @email: matteo.pedrotti@strath.ac.uk
+
+Please cite the following DOI: 10.5281/zenodo.3524929
+GitHub repository: https://github.com/PedroMat8/micropy
 """
 
 import numpy as np
@@ -49,9 +52,12 @@ class DataElaboration():
 
     def save_output(self):
         """Save outputs"""
-        matrix = np.column_stack((self.cpd.d, self.cpd.e, np.append(self.psd.d,0), np.append(self.psd.e,0)))
+        matrix = np.column_stack((self.cpd.d, self.cpd.e,
+                                  np.append(self.psd.d,0),
+                                  np.append(self.psd.e,0)))
         header=('diameters_cpd\tvoid_ratio_cpd\tdiameters_psd\tvoid_ratio_psd')
-        np.savetxt('output.txt', matrix, header=header, delimiter='\t', fmt='%s')
+        np.savetxt('output.txt', matrix,
+                   header=header, delimiter='\t', fmt='%s')
 
     @staticmethod
     def interpolate_e(d_min, d_max, d_starting, e_starting, intervals):
@@ -72,8 +78,8 @@ class DataElaboration():
     def cpd_from_array(self, d, e):
         """Get cpd from array"""
         [d, e] = self.sort_cpd(d, e)
-#        [self.cpd.d, self.cpd.e] = DataElaboration.interpolate_e(self.cpd.d, self.cpd.e, self.inputs.dmin, self.inputs.dmax, d, e, self.inputs.intervals)
-        [self.cpd.d, self.cpd.e] = DataElaboration.interpolate_e(self.inputs.dmin, self.inputs.dmax, d, e, self.inputs.intervals)
+        [self.cpd.d, self.cpd.e] = DataElaboration.interpolate_e(
+            self.inputs.dmin, self.inputs.dmax, d, e, self.inputs.intervals)
 
     def cpd_from_mip(self, input_file, inputs_gtec):
         """Get cpd from MIP"""
@@ -146,20 +152,6 @@ class DataElaboration():
             else:
                 return np.sort(d), np.sort(max(e)-e)
 
-        # if np.argmax(d) == np.argmax(e):
-        #     d = np.sort(d)
-        #     e = np.sort(e)
-        #     return d, e
-
-        # elif d[0] > d[-1]:
-        #     d = np.sort(d)
-        #     e = np.sort(max(e)-e)
-        #     return d, e
-
-        # elif e[0] > e[-1]:
-        #     e = (max(e)-e)
-        #     return d, e
-
     class Inputs:
         def __init__(self, inputs):
             self.intervals = inputs['intervals']
@@ -205,7 +197,6 @@ class DataElaboration():
             """Normalize psd"""
             cpd_norm = cpd_e / np.max(cpd_e)
             [foo, psd_norm] = DataElaboration.PSD.psd_from_cpd(cpd_d, cpd_norm)
-            # self.norm = np.append(self.norm, psd_norm)
             self.norm = psd_norm
 
     class CPD(PSD):
@@ -213,5 +204,4 @@ class DataElaboration():
         def norm_cpd(self):
             """Normalize cpd"""
             cpd_norm = self.e / np.max(self.e)
-            # self.norm = np.append(self.norm, cpd_norm)
             self.norm = cpd_norm
