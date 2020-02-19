@@ -28,16 +28,28 @@ class DataElaboration():
 
     def plot_mip(self, inputs_gtec):
         """Plot cpd and psd against expected void ratio"""
-        saturated = (input('Is e=wGs? :') or 'No')
+        saturated = (input('Is e=wGs? [Y or N]: '))
         if saturated in ('YES', 'yes', 'Yes', 'Y', 'y'):
             gtec = self.InputsGtec(inputs_gtec)
             e = gtec.w*gtec.Gs
+
         else:
             e = [float(input('Input void ratio: '))]
 
-        axs = self.plot_data()
-        axs[1].semilogx(
-                self.cpd.d, ([e] * len(self.cpd.d)))
+        cpd_d = self.cpd.d
+        cpd_e = self.cpd.e
+        psd_d = self.psd.d
+        psd_e = self.psd.e
+
+# TODO: This part below partiall replicates method plot_data"
+        fig, axs = plt.subplots(2)
+        fig.suptitle('Void ratio comparison')
+        axs[0].semilogx(cpd_d, cpd_e)
+        axs[0].semilogx(cpd_d, [e] * len(cpd_d))
+        axs[0].set(xlabel='diameters [um]', ylabel='void ratio [e]')
+        axs[1].semilogx(psd_d, psd_e)
+        axs[1].set(xlabel='diameters [um]', ylabel='frequency de/d(logd)')
+
 
     @staticmethod
     def plot_data(cpd_d, cpd_e, psd_d, psd_e):

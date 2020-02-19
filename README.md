@@ -27,22 +27,21 @@ existing data.
     * _InputsGtec.Gs_ --> specific gravity
     * _InputsGtec.Ms_ --> MIP sample dry mass
     * _InputsGtec.w_ --> water content
-    * _InputsGtec.teta_ --> contact angle [degres]
-    * _InputsGtec.surf_tension_ --> surface tension [N/m]
+    * _InputsGtec.teta_ --> mercury contact angle [degres]
+    * _InputsGtec.surf_tension_ --> mercury surface tension [N/m]
 
 * ### Methods:
   * _plot_mip_ --> plots psd and cpd against expected e
-  * _plot_data_ --> plots psd and cpd (staticmethod)
+  * _plot_data_ --> plots psd and cpd (@staticmethod)
   * _save_output_ --> saves psd and cpd on txt
-  * _interpolate_e_ --> interpolates e_cum for a new set of intervals (staticmethod)
+  * _interpolate_e_ --> interpolates e_cum for a new set of intervals (@staticmethod)
   * _cpd_from_array_ --> creates cpd from d and e array
   * _cpd_from_mip_ --> imports cpd from MIP. Assumes parallel plates
   * _cpd_from_file_ --> imports cpd from txt file
   * _norm_dist_ --> normalizes distributions
-  * _sort_cpd_ --> orders cpd from smaller to larger diameters (static method)
-  * _psd.psd_from_cpd_ --> computes psd (static method)
+  * _sort_cpd_ --> orders cpd from smaller to larger diameters (@staticmethod)
+  * _psd.psd_from_cpd_ --> computes psd (@staticmethod)
   * _psd.norm_psd_ --> normalizes psd
-  * _cpd.reverse_cpd_ --> reverses cpd order
   * _cpd.norm_cpd_ --> normalizes cpd
 
 * ### Classes:

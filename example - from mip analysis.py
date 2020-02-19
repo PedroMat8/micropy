@@ -58,7 +58,7 @@ data.cpd_from_mip(inputfilename, inputs_gtec) # Create the cpd
 [data.psd.d, data.psd.e] = data.psd.psd_from_cpd(data.cpd.d, data.cpd.e)
 
 # Plot cpd and psd
-data.plot_data(data.cpd.d, data.cpd.e, data.psd.d, data.psd.e)
+data.plot_mip(inputs_gtec)
 
 # Save data
 data.save_output()
