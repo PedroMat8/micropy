@@ -41,7 +41,7 @@ class DataElaboration():
         psd_d = self.psd.d
         psd_e = self.psd.e
 
-# TODO: This part below partiall replicates method plot_data"
+# TODO: This part below partially replicates method plot_data"
         fig, axs = plt.subplots(2)
         fig.suptitle('Void ratio comparison')
         axs[0].semilogx(cpd_d, cpd_e)
