@@ -19,7 +19,7 @@ from numba import jit
 
 
 class DataElaboration():
-    """ Returns PSD and CPD from MIP output"""
+    """ Stores psd and cpd of the data set"""
     def __init__(self, inputs):
         self.inputs = self.Inputs(inputs)
         self.psd = self.PSD(self.inputs.intervals)
@@ -32,7 +32,6 @@ class DataElaboration():
         if saturated in ('YES', 'yes', 'Yes', 'Y', 'y'):
             gtec = self.InputsGtec(inputs_gtec)
             e = gtec.w*gtec.Gs
-
         else:
             e = [float(input('Input void ratio: '))]
 
@@ -62,18 +61,18 @@ class DataElaboration():
         axs[1].set(xlabel='diameters [um]', ylabel='void ratio [e]')
         return fig, axs
 
-    def save_output(self):
+    def save_output(self, name='output'):
         """Save outputs"""
         matrix = np.column_stack((self.cpd.d, self.cpd.e,
                                   np.append(self.psd.d,0),
                                   np.append(self.psd.e,0)))
         header=('diameters_cpd\tvoid_ratio_cpd\tdiameters_psd\tvoid_ratio_psd')
-        np.savetxt('output.txt', matrix,
+        namefile = name + '.txt'
+        np.savetxt(namefile, matrix,
                    header=header, delimiter='\t', fmt='%s')
 
     @staticmethod
     def interpolate_e(d_min, d_max, d_starting, e_starting, intervals):
-        """d_new and e_new are empty lists"""
 
         delta_log = ((np.log10(d_max)-np.log10(d_min)) / (intervals-1))
         d_starting_log = np.log10(d_starting)
@@ -101,7 +100,8 @@ class DataElaboration():
         v = alf[:, 1]*1000  # [mm3]
         Vs = gtec.Ms/gtec.Gs*1000
         e = v/Vs
-        dd = -2*0.48*np.cos(np.radians(147))/p  # parallel plates
+         # 2 for parallel plates and 4 for axial symmetry
+        dd = -2*0.48*np.cos(np.radians(147))/p
         if len(dd) < self.inputs.intervals:
             print('Too many intervals. Reduced to ', len(dd))
             self.inputs.intervals = len(dd)
@@ -145,11 +145,6 @@ class DataElaboration():
 
         self.cpd_from_array(d, e)
 
-    def norm_dist(self):
-        """Get normalized distributions"""
-        self.cpd.norm_cpd()
-        self.psd.norm_psd(self.cpd.d, self.cpd.e)
-
     @staticmethod
     def sort_cpd(d, e):
         """Sort cpd"""
@@ -178,12 +173,18 @@ class DataElaboration():
             self.teta = inputs['teta']
             self.surf_tension = inputs['surf_tension']
 
-    class PSD:
+    class CPD():
         def __init__(self, intervals):
             dim = intervals
             self.d = np.empty(dim)
             self.e = np.empty(dim)
-            self.norm = np.empty(dim)
+
+    class PSD(CPD):
+        def __init__(self, intervals):
+            dim = intervals
+            self.d = np.empty(dim)
+            self.e = np.empty(dim)
+            # self.norm = np.empty(dim)
 
         @staticmethod
         def psd_from_cpd(cpd_d, cpd_e):
@@ -203,17 +204,6 @@ class DataElaboration():
                 if foo1 < 0:
                     sys.exit('negative psd')
 
+            psd_e/= np.sum(psd_e)
+
             return psd_d, psd_e
-
-        def norm_psd(self, cpd_d, cpd_e):
-            """Normalize psd"""
-            cpd_norm = cpd_e / np.max(cpd_e)
-            [foo, psd_norm] = DataElaboration.PSD.psd_from_cpd(cpd_d, cpd_norm)
-            self.norm = psd_norm
-
-    class CPD(PSD):
-
-        def norm_cpd(self):
-            """Normalize cpd"""
-            cpd_norm = self.e / np.max(self.e)
-            self.norm = cpd_norm

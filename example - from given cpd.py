@@ -47,4 +47,4 @@ data.cpd_from_file('input\input-edo2.txt')
 data.plot_data(data.cpd.d, data.cpd.e, data.psd.d, data.psd.e)
 
 # Save data
-data.save_output()
+data.save_output('output')

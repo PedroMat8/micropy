@@ -61,4 +61,4 @@ data.cpd_from_mip(inputfilename, inputs_gtec) # Create the cpd
 data.plot_mip(inputs_gtec)
 
 # Save data
-data.save_output()
+data.save_output('output')
