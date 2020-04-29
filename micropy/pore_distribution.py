@@ -86,13 +86,13 @@ class DataElaboration():
 
         return d_new, e_new
 
-    def cpd_from_array(self, d, e):
+    def get_cpd_from_array(self, d, e):
         """Get cpd from array"""
         [d, e] = self.sort_cpd(d, e)
         [self.cpd.d, self.cpd.e] = DataElaboration.interpolate_e(
             self.inputs.dmin, self.inputs.dmax, d, e, self.inputs.intervals)
 
-    def cpd_from_mip(self, input_file, inputs_gtec):
+    def get_cpd_from_mip(self, input_file, inputs_gtec):
         """Get cpd from MIP"""
         gtec = self.InputsGtec(inputs_gtec)
         alf = np.loadtxt(input_file, usecols=(0, 1), skiprows=0)
@@ -119,9 +119,9 @@ class DataElaboration():
                     round(np.min(dd), 4)) + ': ')
             self.inputs.dmin = round(float(new_dmin), 4)
 
-        self.cpd_from_array(dd, e)
+        self.get_cpd_from_array(dd, e)
 
-    def cpd_from_file(self, input_file):
+    def get_cpd_from_file(self, input_file):
         """Get cpd from txt file"""
         alf = np.loadtxt(input_file, usecols=(0, 1), skiprows=0)
         d = alf[:, 0]
@@ -143,7 +143,7 @@ class DataElaboration():
                     round(np.min(d), 4)) + ': ')
             self.inputs.dmin = round(float(new_dmin), 4)
 
-        self.cpd_from_array(d, e)
+        self.get_cpd_from_array(d, e)
 
     @staticmethod
     def sort_cpd(d, e):
@@ -187,7 +187,7 @@ class DataElaboration():
             # self.norm = np.empty(dim)
 
         @staticmethod
-        def psd_from_cpd(cpd_d, cpd_e):
+        def get_psd_from_cpd(cpd_d, cpd_e):
             """Create psd from cpd"""
             [cpd_d, cpd_e] = DataElaboration.sort_cpd(cpd_d, cpd_e)
 
