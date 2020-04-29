@@ -35,12 +35,12 @@ existing data.
   * _plot_data_ --> plots psd and cpd (@staticmethod)
   * _save_output_ --> saves psd and cpd on txt
   * _interpolate_e_ --> interpolates e_cum for a new set of intervals (@staticmethod)
-  * _get_cpd_from_array_ --> creates cpd from d and e array
-  * _get_cpd_from_mip_ --> imports cpd from MIP. Assumes parallel plates
-  * _get_cpd_from_file_ --> imports cpd from txt file
+  * _cpd_from_array_ --> creates cpd from d and e array
+  * _cpd_from_mip_ --> imports cpd from MIP. Assumes parallel plates
+  * _cpd_from_file_ --> imports cpd from txt file
   * _norm_dist_ --> normalizes distributions
   * _sort_cpd_ --> orders cpd from smaller to larger diameters (@staticmethod)
-  * _psd.get_psd_from_cpd_ --> computes psd (@staticmethod)
+  * _psd.psd_from_cpd_ --> computes psd (@staticmethod)
   * _psd.norm_psd_ --> normalizes psd
   * _cpd.norm_cpd_ --> normalizes cpd
 

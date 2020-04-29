@@ -14,26 +14,24 @@
     @author: PedroMat8
     @email: matteo.pedrotti@strath.ac.uk '''
 
-# =============================================================================
 # Required python packages:
-# - numpy       -->     conda install numpy
-# - matplotlib  -->     conda install matplotlib
-# - numba       -->     conda install numba
-#               -->     conda install -n micropy cudatoolkit
-#
+# - numpy       -->     pip install numpy
+# - matplotlib  -->     pip install matplotlib
+# - sys         -->     pip install os-sys
+# - numba       -->     pip install numba
+
 # Keep the input data in a subfolder named "input".
-# Input files columns are pore diameter[um] and cumulative void ratio[-].
+# Input columns are MIP intrusion pressure [PSI] and intruded volume [cc].
 # No headers.
-# =============================================================================
+##############################################################################
+##############################################################################
 
 from micropy import pore_distribution as pore
 
 outputfilename = 'output.txt'
 inputfilename = 'input\input_mip.txt'
 
-# =============================================================================
-# # Input parameters
-# =============================================================================
+# Input parameters
 Gs = 2.65               # of the clay
 Ms = 0.2248             # [g] --> of the specimen
 w = 0.47                # [-] --> of the specimen
@@ -45,9 +43,7 @@ intervals = 35          # Number of intervals for frequency
 dmax = 120              # [um] --> Maximum diameter
 dmin = 0.004            # [um] --> Minimum diameter
 
-# =============================================================================
-# # There should no need to touch anything below this line
-# =============================================================================
+# There should no need to touch anything below this line
 inputs = {
         'intervals': intervals,
         'dmax': dmax, 'dmin': dmin
@@ -56,10 +52,10 @@ inputs_gtec = {'Gs': Gs, 'Ms': Ms, 'w': w, 'teta': teta,
                'surf_tension': surf_tension}
 
 data = pore.DataElaboration(inputs) # Create a data set
-data.get_cpd_from_mip(inputfilename, inputs_gtec) # Create the cpd
+data.cpd_from_mip(inputfilename, inputs_gtec) # Create the cpd
 
 # Calculate the psd
-[data.psd.d, data.psd.e] = data.psd.get_psd_from_cpd(data.cpd.d, data.cpd.e)
+[data.psd.d, data.psd.e] = data.psd.psd_from_cpd(data.cpd.d, data.cpd.e)
 
 # Plot cpd and psd
 data.plot_mip(inputs_gtec)
