@@ -144,6 +144,7 @@ class DataElaboration():
             self.inputs.dmin = round(float(new_dmin), 4)
 
         self.get_cpd_from_array(d, e)
+        return
 
     @staticmethod
     def sort_cpd(d, e):
