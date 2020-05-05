@@ -11,7 +11,7 @@ setuptools.setup(
     description="Tool to investigate pore space",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/PedroMat8/pore_sizer",
+    url="https://github.com/PedroMat8/micropy",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
