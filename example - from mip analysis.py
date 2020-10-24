@@ -22,20 +22,20 @@
 #               -->     conda install -n micropy cudatoolkit
 #
 # Keep the input data in a subfolder named "input".
-# Input files columns are pore diameter[um] and cumulative void ratio[-].
+# Input files columns are pressure[PSI] and cumulative volume[mm3].
 # No headers.
 # =============================================================================
 
 from micropy import pore_distribution as pore
 
 outputfilename = 'output.txt'
-inputfilename = 'input\input_mip.txt'
+inputfilename = 'input\input.txt'
 
 # =============================================================================
 # # Input parameters
 # =============================================================================
 Gs = 2.65               # of the clay
-Ms = 0.2248             # [g] --> of the specimen
+Ms = 0.3016             # [g] --> of the specimen
 w = 0.47                # [-] --> of the specimen
 teta = 147              # [degrees] --> Mercury contact angle
 surf_tension = 0.48     # [N/m] --> mercury surface tension
@@ -65,4 +65,4 @@ data.get_cpd_from_mip(inputfilename, inputs_gtec) # Create the cpd
 data.plot_mip(inputs_gtec)
 
 # Save data
-data.save_output('output')
+data.save_output(outputfilename)
