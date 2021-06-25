@@ -25,11 +25,14 @@
 # Input files columns are pressure[PSI] and cumulative volume[mm3].
 # No headers.
 # =============================================================================
-
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__),
+                             os.path.pardir, 'micropy'))
+# from micropy import pore_distribution as pdist
 from micropy import pore_distribution as pore
 
 outputfilename = 'output.txt'
-inputfilename = 'input\input.txt'
+inputfilename = 'input\input_mip.txt'
 
 # =============================================================================
 # # Input parameters

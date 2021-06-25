@@ -189,9 +189,10 @@ class DataElaboration():
 
         @staticmethod
         def get_psd_from_cpd(cpd_d, cpd_e):
-            """Create psd from cpd"""
+            """Create psd from cpd.
+            Before calculating psd, cpd is normalized."""
             [cpd_d, cpd_e] = DataElaboration.sort_cpd(cpd_d, cpd_e)
-
+            cpd_e /= cpd_e.max()
             alf = np.size(cpd_d, 0)
             psd_d = np.empty(alf-1)
             psd_e = np.empty(alf-1)
@@ -204,7 +205,5 @@ class DataElaboration():
                 psd_e[i] = foo1
                 if foo1 < 0:
                     sys.exit('negative psd')
-
-            psd_e/= np.sum(psd_e)
 
             return psd_d, psd_e

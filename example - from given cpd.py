@@ -31,9 +31,9 @@ from micropy import pore_distribution as pore
 # =============================================================================
 # # Input parameters
 # =============================================================================
-intervals = 35          # Number of intervals for frequency
-dmax = 770              # [um] --> Maximum diameter
-dmin = 0.0044           # [um] --> Minimum diameter
+intervals = 30          # Number of intervals for frequency
+dmax = 250              # [um] --> Maximum diameter
+dmin = 0.0062           # [um] --> Minimum diameter
 
 # =============================================================================
 # # There should no need to touch anything below this line
@@ -44,7 +44,7 @@ inputs = {
         }
 
 data = pore.DataElaboration(inputs)
-data.get_cpd_from_file('input\input-edo2.txt')
+data.get_cpd_from_file('input\input-array.txt')
 [data.psd.d, data.psd.e] = data.psd.get_psd_from_cpd(data.cpd.d, data.cpd.e)
 # data.norm_dist()
 
