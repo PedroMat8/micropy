@@ -28,6 +28,10 @@
 
 from micropy import pore_distribution as pore
 
+outputfilename = 'output'
+inputfilename = 'input\input-array.txt'
+equilog = False
+
 # =============================================================================
 # # Input parameters
 # =============================================================================
@@ -44,7 +48,7 @@ inputs = {
         }
 
 data = pore.DataElaboration(inputs)
-data.get_cpd_from_file('input\input-array.txt')
+data.get_cpd_from_file(inputfilename, equilog=equilog)
 [data.psd.d, data.psd.e] = data.psd.get_psd_from_cpd(data.cpd.d, data.cpd.e)
 # data.norm_dist()
 
@@ -52,4 +56,4 @@ data.get_cpd_from_file('input\input-array.txt')
 data.plot_data(data.cpd.d, data.cpd.e, data.psd.d, data.psd.e)
 
 # Save data
-data.save_output('output')
+data.save_output(outputfilename)

@@ -25,18 +25,18 @@
 # Input files columns are pressure[PSI] and cumulative volume[mm3].
 # No headers.
 # =============================================================================
-import sys, os
-# sys.path.append(os.path.join(os.path.dirname(__file__),
-#                              os.path.pardir, 'micropy'))
+# import sys, os
+
 from micropy import pore_distribution as pore
 
 outputfilename = 'output.txt'
 inputfilename = 'input\input_mip.txt'
+equilog = False
 
 # =============================================================================
 # # Input parameters
 # =============================================================================
-Gs = 2.65               # of the clay
+Gs = 2.605               # of the clay
 Ms = 0.3016             # [g] --> of the specimen
 w = 0.47                # [-] --> of the specimen
 teta = 147              # [degrees] --> Mercury contact angle
@@ -58,7 +58,7 @@ inputs_gtec = {'Gs': Gs, 'Ms': Ms, 'w': w, 'teta': teta,
                'surf_tension': surf_tension}
 
 data = pore.DataElaboration(inputs) # Create a data set
-data.get_cpd_from_mip(inputfilename, inputs_gtec) # Create the cpd
+data.get_cpd_from_mip(inputfilename, inputs_gtec, equilog=equilog) # Create the cpd
 
 # Calculate the psd
 [data.psd.d, data.psd.e] = data.psd.get_psd_from_cpd(data.cpd.d, data.cpd.e)
@@ -67,4 +67,4 @@ data.get_cpd_from_mip(inputfilename, inputs_gtec) # Create the cpd
 data.plot_mip(inputs_gtec)
 
 # Save data
-data.save_output(outputfilename)
+# data.save_output(outputfilename)

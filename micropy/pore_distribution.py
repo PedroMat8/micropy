@@ -15,7 +15,7 @@ GitHub repository: https://github.com/PedroMat8/micropy
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-from numba import jit
+# from numba import jit
 
 
 class DataElaboration():
@@ -25,10 +25,11 @@ class DataElaboration():
         self.psd = self.PSD(self.inputs.intervals)
         self.cpd = self.CPD(self.inputs.intervals)
 
-
     def plot_mip(self, inputs_gtec):
         """Plot cpd and psd against expected void ratio"""
-        saturated = (input('Is e=wGs? [Y or N]: '))
+# TODO: input does not work in anaconda..to be added once problem fixed
+        # saturated = (input('Is e=wGs? [Y or N]: '))
+        saturated = 'yes'
         if saturated in ('YES', 'yes', 'Yes', 'Y', 'y'):
             gtec = self.InputsGtec(inputs_gtec)
             e = gtec.w*gtec.Gs
@@ -89,10 +90,18 @@ class DataElaboration():
     def get_cpd_from_array(self, d, e):
         """Get cpd from array"""
         [d, e] = self.sort_cpd(d, e)
+        # self.cpd.d = d
+        # self.cpd.e = e
         [self.cpd.d, self.cpd.e] = DataElaboration.interpolate_e(
             self.inputs.dmin, self.inputs.dmax, d, e, self.inputs.intervals)
 
-    def get_cpd_from_mip(self, input_file, inputs_gtec):
+    def get_cpd_from_array_no_change(self, d, e):
+        [d, e] = self.sort_cpd(d, e)
+        self.cpd.d = d
+        self.cpd.e = e
+        return self.cpd
+
+    def get_cpd_from_mip(self, input_file, inputs_gtec, equilog):
         """Get cpd from MIP"""
         gtec = self.InputsGtec(inputs_gtec)
         alf = np.loadtxt(input_file, usecols=(0, 1), skiprows=0)
@@ -119,9 +128,12 @@ class DataElaboration():
                     round(np.min(dd), 4)) + ': ')
             self.inputs.dmin = round(float(new_dmin), 4)
 
-        self.get_cpd_from_array(dd, e)
+        if equilog:
+            self.get_cpd_from_array(dd, e)
+        else:
+            self.get_cpd_from_array_no_change(dd, e)
 
-    def get_cpd_from_file(self, input_file):
+    def get_cpd_from_file(self, input_file, equilog):
         """Get cpd from txt file"""
         alf = np.loadtxt(input_file, usecols=(0, 1), skiprows=0)
         d = alf[:, 0]
@@ -143,7 +155,11 @@ class DataElaboration():
                     round(np.min(d), 4)) + ': ')
             self.inputs.dmin = round(float(new_dmin), 4)
 
-        self.get_cpd_from_array(d, e)
+        if equilog:
+            self.get_cpd_from_array(d, e)
+        else:
+            self.get_cpd_from_array_no_change(d, e)
+        # self.get_cpd_from_array(d, e)
         return
 
     @staticmethod
