@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="micropy",
-    version="1.0",
+    version="1.1",
     author="Matteo Pedrotti",
     author_email="matteo.pedrotti@strath.ac.uk",
     description="Tool to investigate pore space",

@@ -17,8 +17,6 @@
 # Required python packages:
 # - numpy       -->     conda install numpy
 # - matplotlib  -->     conda install matplotlib
-# - numba       -->     conda install numba
-#               -->     conda install -n micropy cudatoolkit
 #
 # Keep the input data in a subfolder named "input".
 # Input files columns are pore diameter[um] and cumulative void ratio[-].

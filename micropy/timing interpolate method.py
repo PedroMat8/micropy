@@ -28,8 +28,9 @@ inputs = {
         }
 
 data = dist.DataElaboration(inputs)
-d, e = data.get_cpd_from_file('..\input\input-edo2.txt')
-
+cpd = data.get_cpd_from_file('..\input\input-edo2.txt', equilog=True)
+d = cpd.d
+e = cpd.e
 [d, e] = data.sort_cpd(d, e)
 
 # =============================================================================

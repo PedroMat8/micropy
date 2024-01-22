@@ -18,14 +18,10 @@
 # Required python packages:
 # - numpy       -->     conda install numpy
 # - matplotlib  -->     conda install matplotlib
-# - numba       -->     conda install numba
-#               -->     conda install -n micropy cudatoolkit
-#
 # Keep the input data in a subfolder named "input".
 # Input files columns are pressure[PSI] and cumulative volume[mm3].
 # No headers.
 # =============================================================================
-# import sys, os
 
 from micropy import pore_distribution as pore
 

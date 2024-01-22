@@ -15,7 +15,6 @@ GitHub repository: https://github.com/PedroMat8/micropy
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-# from numba import jit
 
 
 class DataElaboration():
@@ -27,21 +26,14 @@ class DataElaboration():
 
     def plot_mip(self, inputs_gtec):
         """Plot cpd and psd against expected void ratio"""
-# TODO: input does not work in anaconda..to be added once problem fixed
-        # saturated = (input('Is e=wGs? [Y or N]: '))
-        saturated = 'yes'
-        if saturated in ('YES', 'yes', 'Yes', 'Y', 'y'):
-            gtec = self.InputsGtec(inputs_gtec)
-            e = gtec.w*gtec.Gs
-        else:
-            e = [float(input('Input void ratio: '))]
+        gtec = self.InputsGtec(inputs_gtec)
+        e = gtec.w*gtec.Gs
 
         cpd_d = self.cpd.d
         cpd_e = self.cpd.e
         psd_d = self.psd.d
         psd_e = self.psd.e
 
-# TODO: This part below partially replicates method plot_data"
         fig, axs = plt.subplots(2)
         fig.suptitle('Void ratio comparison')
         axs[0].semilogx(cpd_d, cpd_e)
@@ -49,7 +41,6 @@ class DataElaboration():
         axs[0].set(xlabel='diameters [um]', ylabel='void ratio [e]')
         axs[1].semilogx(psd_d, psd_e)
         axs[1].set(xlabel='diameters [um]', ylabel='frequency de/d(logd)')
-
 
     @staticmethod
     def plot_data(cpd_d, cpd_e, psd_d, psd_e):
@@ -71,6 +62,7 @@ class DataElaboration():
         namefile = name + '.txt'
         np.savetxt(namefile, matrix,
                    header=header, delimiter='\t', fmt='%s')
+        return
 
     @staticmethod
     def interpolate_e(d_min, d_max, d_starting, e_starting, intervals):
@@ -132,6 +124,7 @@ class DataElaboration():
             self.get_cpd_from_array(dd, e)
         else:
             self.get_cpd_from_array_no_change(dd, e)
+        return self.cpd
 
     def get_cpd_from_file(self, input_file, equilog):
         """Get cpd from txt file"""
@@ -160,7 +153,7 @@ class DataElaboration():
         else:
             self.get_cpd_from_array_no_change(d, e)
         # self.get_cpd_from_array(d, e)
-        return
+        return self.cpd
 
     @staticmethod
     def sort_cpd(d, e):

@@ -1,0 +1,15 @@
+name: micropy
+channels:
+  - conda-forge
+  - anaconda
+  - defaults
+dependencies:
+  - ipykernel
+  - matplotlib
+  - numpy
+  - openpyxl
+  - pandas
+  - python
+  - scipy=
+  - spyder-kernels=2.5.0
+prefix: C:\Users\Matteo\anaconda3\envs\micropy
