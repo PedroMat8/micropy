@@ -55,7 +55,7 @@ existing data.
   MIT License - Copyright (c) 2019 Matteo Pedrotti
 
   Please cite the following DOI:
-  10.5281/zenodo.3524929
+  [![DOI](https://zenodo.org/badge/218507773.svg)](https://zenodo.org/doi/10.5281/zenodo.3524929)
 
   Information on the module are found:
   https://github.com/PedroMat8/micropy
